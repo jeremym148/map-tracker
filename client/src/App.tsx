@@ -1,16 +1,14 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useRef } from 'react';
 import axios from 'axios';
 import MapComponent from './components/MapComponent';
 
 const App: React.FC = () => {
-  const [gameStarted, setGameStarted] = useState(false);
   const [ballPosition, setBallPosition] = useState({ lat: 0, lng: 0 });
   const [goalPosition, setGoalPosition] = useState({ lat: 0, lng: 0 });
 
   // Function to fetch goal position from the backend
   const fetchGoalPosition = async () => {
-    if (ballPosition.lat === 0 && ballPosition.lng === 0) return;
-
+    if (ballPosition.lat === 0 && ballPosition.lng === 0 ) return;
     try {
       const params = new URLSearchParams({
         currentLat: ballPosition.lat.toString(),
@@ -55,31 +53,35 @@ const App: React.FC = () => {
   };
 
 
+  const startGameRef = useRef(false);
+
   useEffect(() => {
-    const startGame = window.confirm('Do you want to start the game?');
-    if (startGame) {
-      setGameStarted(true);
-      trackUserPosition();
+    if (!startGameRef.current) {
+      const startGame = window.confirm('Do you want to start the game?');
+      if (startGame) {
+        trackUserPosition();
+        startGameRef.current = true;
+      }
     }
   }, []);
 
   // Update goal position once we have the initial position of the ball
   useEffect(() => {
-    if (gameStarted && ballPosition.lat !== 0 && ballPosition.lng !== 0 && goalPosition.lat === 0 && goalPosition.lng === 0) {
+    if (ballPosition.lat !== 0 && ballPosition.lng !== 0 && goalPosition.lat === 0 && goalPosition.lng === 0) {
       fetchGoalPosition();
     }
-  }, [ballPosition, gameStarted]);
+  }, [ballPosition]);
 
   // Call checkProximity every time ballPosition updates
   useEffect(() => {
-    if (gameStarted && ballPosition.lat !== 0 && ballPosition.lng !== 0 && goalPosition.lat !== 0 && goalPosition.lng !== 0) {
+    if (ballPosition.lat !== 0 && ballPosition.lng !== 0 && goalPosition.lat !== 0 && goalPosition.lng !== 0) {
       checkProximity();
     }
-  }, [ballPosition, gameStarted]);
+  }, [ballPosition]);
 
   return (
     <div className="App">
-      {gameStarted && (
+      {ballPosition.lat !== 0 && ballPosition.lng !== 0 && goalPosition.lat !== 0 && goalPosition.lng !== 0 && (
         <MapComponent ballPosition={ballPosition} goalPosition={goalPosition} />
       )}
     </div>
