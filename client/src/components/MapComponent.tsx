@@ -13,12 +13,12 @@ const MapComponent: React.FC<MapComponentProps> = ({ ballPosition, goalPosition 
   // Define custom icons
   const ballIcon = new L.Icon({
     iconUrl: '/ball.png',
-    iconSize: [25, 25]
+    iconSize: [100 , 100]
   });
 
   const goalIcon = new L.Icon({
     iconUrl: '/goal.png',
-    iconSize: [25, 25]
+    iconSize: [100, 100]
   });
 
   return (

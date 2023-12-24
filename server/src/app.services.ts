@@ -12,9 +12,14 @@ export const generateGoal = (current: Coordinate): Coordinate => {
     const radius = 1; // radius in kilometers
     const options = { units: "kilometers" as turf.Units};
     const circle = turf.circle(center, radius, options);
-    const randomPoint = turf.randomPoint(1, { bbox: circle.bbox }).features[0].geometry.coordinates;
+    const randomPoint = getRandomElement(circle.geometry.coordinates[0]);
     return { lat: randomPoint[1], lng: randomPoint[0] };
   };
+
+  function getRandomElement(arr: any[]) {
+    const randomIndex = Math.floor(Math.random() * arr.length);
+    return arr[randomIndex];
+  }
 
 /**
  * Checks if the current position is close enough to the goal position.

@@ -46,6 +46,7 @@ const App: React.FC = () => {
   // Real-time tracking of the user's position (simplified for example)
   const trackUserPosition = () => {
     navigator.geolocation.watchPosition((position) => {
+      console.log('New position:', position);
       setBallPosition({
         lat: position.coords.latitude,
         lng: position.coords.longitude,
@@ -62,12 +63,12 @@ const App: React.FC = () => {
     }
   }, []);
 
-    // Update goal position once we have the initial position of the ball
-    useEffect(() => {
-      if (gameStarted && ballPosition.lat !== 0 && ballPosition.lng !== 0 && goalPosition.lat === 0 && goalPosition.lng === 0) {
-        fetchGoalPosition();
-      }
-    }, [ballPosition, gameStarted]);
+  // Update goal position once we have the initial position of the ball
+  useEffect(() => {
+    if (gameStarted && ballPosition.lat !== 0 && ballPosition.lng !== 0 && goalPosition.lat === 0 && goalPosition.lng === 0) {
+      fetchGoalPosition();
+    }
+  }, [ballPosition, gameStarted]);
 
   // Call checkProximity every time ballPosition updates
   useEffect(() => {
