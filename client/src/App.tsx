@@ -52,17 +52,11 @@ const App: React.FC = () => {
     });
   };
 
-
-  const startGameRef = useRef(false);
-
   useEffect(() => {
-    if (!startGameRef.current) {
       const startGame = window.confirm('Do you want to start the game?');
       if (startGame) {
         trackUserPosition();
-        startGameRef.current = true;
       }
-    }
   }, []);
 
   // Update goal position once we have the initial position of the ball
